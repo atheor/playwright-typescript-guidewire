@@ -1,0 +1,65 @@
+<!-- Placeholder WSDL for D365 Policy Service -->
+<!-- Replace with actual WSDL from your D365 instance -->
+<!-- Run: npm run generate:soap-types to regenerate TypeScript types -->
+<definitions name="D365PolicyService"
+  targetNamespace="http://d365.example.com/policy"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:tns="http://d365.example.com/policy"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <types>
+    <xsd:schema targetNamespace="http://d365.example.com/policy">
+      <xsd:element name="GetPolicyRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="policyNumber" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetPolicyResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="policyNumber" type="xsd:string"/>
+            <xsd:element name="status" type="xsd:string"/>
+            <xsd:element name="effectiveDate" type="xsd:string"/>
+            <xsd:element name="expirationDate" type="xsd:string"/>
+            <xsd:element name="insuredName" type="xsd:string"/>
+            <xsd:element name="premium" type="xsd:decimal"/>
+            <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="errorMessage" type="xsd:string" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+
+  <message name="GetPolicyInput">
+    <part name="parameters" element="tns:GetPolicyRequest"/>
+  </message>
+  <message name="GetPolicyOutput">
+    <part name="parameters" element="tns:GetPolicyResponse"/>
+  </message>
+
+  <portType name="D365PolicyPortType">
+    <operation name="GetPolicy">
+      <input message="tns:GetPolicyInput"/>
+      <output message="tns:GetPolicyOutput"/>
+    </operation>
+  </portType>
+
+  <binding name="D365PolicyBinding" type="tns:D365PolicyPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="GetPolicy">
+      <soap:operation soapAction="http://d365.example.com/policy/GetPolicy"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+  </binding>
+
+  <service name="D365PolicyService">
+    <port name="D365PolicyPort" binding="tns:D365PolicyBinding">
+      <soap:address location="http://d365-instance/api/soap/policy"/>
+    </port>
+  </service>
+</definitions>

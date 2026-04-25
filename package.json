@@ -1,0 +1,39 @@
+{
+  "name": "playwright-typescript-guidewire",
+  "version": "1.0.0",
+  "description": "Playwright TypeScript test automation framework for Guidewire PolicyCenter, ClaimCenter, BillingCenter with D365 SOAP integration",
+  "scripts": {
+    "test": "playwright test",
+    "test:pc": "playwright test --project=PolicyCenter",
+    "test:cc": "playwright test --project=ClaimCenter",
+    "test:bc": "playwright test --project=BillingCenter",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report",
+    "report:allure": "allure generate allure-results --clean && allure open",
+    "codegen": "playwright codegen",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "typecheck": "tsc --noEmit",
+    "generate:soap-types": "node scripts/generate-soap-types.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "@types/node": "^20.12.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "allure-playwright": "^3.0.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-playwright": "^1.6.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "node-soap": "^1.1.4",
+    "winston": "^3.13.0",
+    "wsdl-tsclient": "^1.4.2"
+  }
+}
