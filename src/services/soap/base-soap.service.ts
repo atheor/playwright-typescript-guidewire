@@ -1,4 +1,4 @@
-import * as soap from 'node-soap';
+import * as soap from 'soap';
 import { config } from '../../config/env.config';
 import { Logger } from '../utils/logger';
 
@@ -16,7 +16,6 @@ export abstract class BaseSoapService {
     if (!this.client) {
       this.client = await soap.createClientAsync(this.wsdlPath, {
         endpoint: config.d365.soapUrl,
-        timeout: config.d365.timeout,
       });
 
       // Set WS-Security credentials
@@ -27,7 +26,7 @@ export abstract class BaseSoapService {
     return this.client;
   }
 
-  protected async call<TRequest, TResponse>(
+  protected async call<TRequest extends object, TResponse>(
     methodName: string,
     request: TRequest,
   ): Promise<TResponse> {

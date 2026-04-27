@@ -1,5 +1,4 @@
 import { Page } from '@playwright/test';
-import { BillingAccount } from '../types/domain.types';
 import { BillingAccountPage, MakePaymentPage } from '../pages/billing/billing-account.page';
 import { D365BillingService } from '../services/soap/d365-billing.service';
 import { Logger } from '../services/utils/logger';

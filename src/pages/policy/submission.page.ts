@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
 import { BasePage } from '../base.page';
-import { Policy } from '../../types/domain.types';
+import { Policy, Vehicle } from '../../types/domain.types';
 import { WizardStep } from '../components/wizard-step.component';
 import { AddressForm } from '../components/address-form.component';
 
@@ -12,7 +12,6 @@ export class NewSubmissionPage extends BasePage {
 
   private readonly productSelector = this.page.locator('[id*="ProductCode"], [name*="ProductCode"]');
   private readonly stateSelector = this.page.locator('[id*="BaseState"], [name*="BaseState"]');
-  private readonly nextBtn = this.page.getByRole('button', { name: 'Next' });
 
   constructor(page: Page) {
     super(page);
@@ -79,7 +78,7 @@ export class VehiclesPage extends BasePage {
     super(page);
   }
 
-  async addVehicle(vehicle: Policy['vehicles'] extends Array<infer V> ? V : never): Promise<void> {
+  async addVehicle(vehicle: Vehicle): Promise<void> {
     await this.addVehicleBtn.click();
     await this.waitForPageLoad();
 

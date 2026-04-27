@@ -32,8 +32,10 @@
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
-    "node-soap": "^1.1.4",
-    "winston": "^3.13.0",
+    "soap": "^1.1.1",
+    "winston": "^3.13.0"
+  },
+  "optionalDependencies": {
     "wsdl-tsclient": "^1.4.2"
   }
 }

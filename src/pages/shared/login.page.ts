@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 import { config } from '../../config/env.config';
 
 /**
@@ -6,11 +6,15 @@ import { config } from '../../config/env.config';
  * Instantiate with the target app's base URL.
  */
 export class LoginPage {
-  private readonly usernameInput = this.page.locator('[name="j_username"], #username');
-  private readonly passwordInput = this.page.locator('[name="j_password"], #password');
-  private readonly loginBtn = this.page.getByRole('button', { name: /Log In|Login|Sign In/ });
+  private readonly usernameInput: Locator;
+  private readonly passwordInput: Locator;
+  private readonly loginBtn: Locator;
 
-  constructor(private readonly page: Page) {}
+  constructor(private readonly page: Page) {
+    this.usernameInput = page.locator('[name="j_username"], #username');
+    this.passwordInput = page.locator('[name="j_password"], #password');
+    this.loginBtn = page.getByRole('button', { name: /Log In|Login|Sign In/ });
+  }
 
   async goto(baseUrl: string): Promise<void> {
     await this.page.goto(baseUrl);

@@ -1,17 +1,23 @@
-import { Page } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 
 /**
  * WizardStep component — wraps the Guidewire multi-step wizard navigation bar
  * that appears consistently across PolicyCenter and ClaimCenter submissions.
  */
 export class WizardStep {
-  private readonly nextBtn = this.page.getByRole('button', { name: 'Next' });
-  private readonly backBtn = this.page.getByRole('button', { name: 'Back' });
-  private readonly finishBtn = this.page.getByRole('button', { name: 'Finish' });
-  private readonly saveBtn = this.page.getByRole('button', { name: /Save|Update/ });
-  private readonly cancelBtn = this.page.getByRole('button', { name: 'Cancel' });
+  private readonly nextBtn: Locator;
+  private readonly backBtn: Locator;
+  private readonly finishBtn: Locator;
+  private readonly saveBtn: Locator;
+  private readonly cancelBtn: Locator;
 
-  constructor(private readonly page: Page) {}
+  constructor(private readonly page: Page) {
+    this.nextBtn = page.getByRole('button', { name: 'Next' });
+    this.backBtn = page.getByRole('button', { name: 'Back' });
+    this.finishBtn = page.getByRole('button', { name: 'Finish' });
+    this.saveBtn = page.getByRole('button', { name: /Save|Update/ });
+    this.cancelBtn = page.getByRole('button', { name: 'Cancel' });
+  }
 
   async next(): Promise<void> {
     await this.nextBtn.click();

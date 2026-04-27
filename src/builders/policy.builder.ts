@@ -2,7 +2,6 @@ import { faker } from '@faker-js/faker';
 import {
   Policy,
   PolicyType,
-  PolicyPeriod,
   PolicyHolder,
   Vehicle,
   Driver,

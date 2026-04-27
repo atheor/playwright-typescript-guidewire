@@ -85,6 +85,8 @@ export class ClaimantDetailsPage extends BasePage {
  * Claim Summary page
  */
 export class ClaimSummaryPage extends BasePage {
+  readonly wizard = new WizardStep(this.page);
+
   private readonly claimNumber = this.page.locator('[id*="ClaimNumber"]').first();
   private readonly claimStatus = this.page.locator('[id*="State"], [id*="Status"]').first();
   private readonly assignBtn = this.page.getByRole('button', { name: /Assign/i });

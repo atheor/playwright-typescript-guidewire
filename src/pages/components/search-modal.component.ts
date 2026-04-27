@@ -5,11 +5,15 @@ import { Page, Locator } from '@playwright/test';
  * used when picking policies, contacts, accounts from a lookup field.
  */
 export class SearchModal {
-  private readonly modal = this.page.locator('.x-window, [role="dialog"]').last();
-  private readonly searchBtn = this.modal.getByRole('button', { name: 'Search' });
-  private readonly resultsGrid = this.modal.locator('.x-grid-body, [data-ref="normalGrid"]');
+  private readonly modal: Locator;
+  private readonly searchBtn: Locator;
+  private readonly resultsGrid: Locator;
 
-  constructor(private readonly page: Page) {}
+  constructor(private readonly page: Page) {
+    this.modal = page.locator('.x-window, [role="dialog"]').last();
+    this.searchBtn = this.modal.getByRole('button', { name: 'Search' });
+    this.resultsGrid = this.modal.locator('.x-grid-body, [data-ref="normalGrid"]');
+  }
 
   async searchBy(field: string, value: string): Promise<void> {
     await this.modal.locator(`[name*="${field}"], [id*="${field}"]`).fill(value);
