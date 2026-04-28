@@ -66,20 +66,38 @@ playwright-typescript-guidewire/
 │   │   └── utils/
 │   │       └── logger.ts               ← Winston singleton logger
 │   │
-│   └── tests/
-│       ├── auth.setup.ts               ← pre-test auth state generation
-│       ├── policy/
-│       │   └── personal-auto-submission.spec.ts
-│       ├── claims/
-│       │   └── claim-filing.spec.ts
-│       └── billing/
-│           └── billing-payment.spec.ts
+│   ├── tests/
+│   │   ├── auth.setup.ts               ← pre-test auth state generation
+│   │   ├── policy/
+│   │   │   └── personal-auto-submission.spec.ts
+│   │   ├── claims/
+│   │   │   └── claim-filing.spec.ts
+│   │   └── billing/
+│   │       └── billing-payment.spec.ts
+│   │
+│   └── cucumber/                       ← BDD / Cucumber layer
+│       ├── fixtures.ts                 ← Extended test + ScenarioState fixture
+│       ├── features/
+│       │   ├── policy/
+│       │   │   └── personal-auto-submission.feature
+│       │   ├── claims/
+│       │   │   └── claim-filing.feature
+│       │   └── billing/
+│       │       └── billing-payment.feature
+│       └── steps/
+│           ├── common.steps.ts         ← Shared steps (e.g. bound policy setup)
+│           ├── policy.steps.ts
+│           ├── claim.steps.ts
+│           └── billing.steps.ts
 │
+├── .features-gen/                      ← bddgen output; do NOT edit (gitignored)
 ├── .auth/                              ← generated auth state (gitignored)
 ├── playwright-report/                  ← HTML test report (gitignored)
+├── cucumber-report/                    ← BDD HTML test report (gitignored)
 ├── allure-results/                     ← Allure raw results (gitignored)
 │
 ├── playwright.config.ts                ← Playwright configuration + projects
+├── playwright.cucumber.config.ts       ← BDD configuration + projects
 ├── tsconfig.json                       ← TypeScript compiler options + path aliases
 ├── .eslintrc.js                        ← ESLint rules
 ├── .prettierrc                         ← Prettier formatting rules
@@ -92,6 +110,8 @@ playwright-typescript-guidewire/
 | Folder | May import from | Must NOT import from |
 |--------|----------------|----------------------|
 | `tests/` | `fixtures/`, `builders/`, `types/` | `pages/`, `services/` directly |
+| `cucumber/steps/` | `cucumber/fixtures`, `builders/`, `types/` | `pages/`, `services/` directly |
+| `cucumber/fixtures.ts` | `workflows/`, `types/` | `pages/`, `services/` directly |
 | `workflows/` | `pages/`, `services/`, `types/`, `config/` | `fixtures/`, `builders/`, `tests/` |
 | `pages/` | `types/`, `config/` | `workflows/`, `services/`, `builders/` |
 | `services/` | `types/`, `config/` | `pages/`, `workflows/`, `builders/` |

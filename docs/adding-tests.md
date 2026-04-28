@@ -2,6 +2,8 @@
 
 A step-by-step guide for the most common extension scenarios.
 
+Both test styles — **Playwright spec** and **Cucumber / BDD** — are covered here. For a full BDD reference see [Cucumber / BDD Tests](./cucumber-bdd.md).
+
 ---
 
 ## Adding a Test to an Existing Feature
@@ -242,6 +244,8 @@ async verifyContactSynced(contactId: string): Promise<boolean> {
 
 ## Checklist for Any New Test
 
+### Playwright spec
+
 - [ ] Imports `test` and `expect` from `../../fixtures`, not `@playwright/test`
 - [ ] Uses a builder or factory for test data — no hardcoded strings in arrange step
 - [ ] Calls workflow methods — no direct page object or locator usage
@@ -249,3 +253,65 @@ async verifyContactSynced(contactId: string): Promise<boolean> {
 - [ ] Each test is independent — no shared mutable state with other tests
 - [ ] D365 integration is verified via `verifyD365Sync()` for cross-system tests
 - [ ] `test.setTimeout()` added if the test is expected to exceed 60 seconds
+
+### Cucumber / BDD scenario
+
+- [ ] Step texts are written from the user's perspective, not in technical terms
+- [ ] Steps reuse existing step definitions where text matches exactly
+- [ ] New step definitions import `Given`/`When`/`Then` from `src/cucumber/fixtures.ts`
+- [ ] Data flows between steps via `state` (not module-level variables)
+- [ ] Feature file carries a module tag (`@policy`, `@claims`, `@billing`)
+- [ ] Scenario carries `@smoke` or `@regression`
+- [ ] Background steps are used for prerequisite setup shared across all scenarios in the feature
+- [ ] Run `npm run test:cucumber` after adding to confirm `bddgen` succeeds with no unmatched steps
+
+---
+
+## Adding a BDD Scenario to an Existing Feature
+
+1. Open the `.feature` file in `src/cucumber/features/{module}/`
+2. Add a `Scenario:` block with tags
+3. Reuse existing step texts verbatim where possible
+4. Implement any missing steps in the matching `*.steps.ts` file
+5. Run `npm run test:cucumber` to verify
+
+```gherkin
+@regression
+Scenario: Bind a commercial auto policy
+  Given I have a commercial auto policy with a fleet vehicle
+  When I submit and bind the policy
+  Then the policy number should be issued
+```
+
+```typescript
+// src/cucumber/steps/policy.steps.ts
+Given('I have a commercial auto policy with a fleet vehicle', async ({ state }) => {
+  state.policy = new PolicyBuilder()
+    .withType(PolicyType.CommercialAuto)
+    .withHolder(PersonFactory.standard())
+    .withVehicle(VehicleBuilder.standard())
+    .build();
+});
+```
+
+## Adding a New BDD Feature File
+
+1. Create `src/cucumber/features/{module}/{feature-name}.feature`
+2. Add step definitions in `src/cucumber/steps/{module}.steps.ts`
+3. Add the feature path to the matching `defineBddProject` in `playwright.cucumber.config.ts`
+
+```typescript
+// playwright.cucumber.config.ts
+const policyBddProject = defineBddProject({
+  name: 'PolicyCenter-BDD',
+  features: [
+    'src/cucumber/features/policy/**/*.feature',
+    'src/cucumber/features/endorsement/**/*.feature', // ← new
+  ],
+  steps: [
+    'src/cucumber/fixtures.ts',
+    'src/cucumber/steps/policy.steps.ts',
+    'src/cucumber/steps/endorsement.steps.ts',        // ← new
+  ],
+});
+```

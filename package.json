@@ -17,7 +17,13 @@
     "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier --write src/**/*.ts",
     "typecheck": "tsc --noEmit",
-    "generate:soap-types": "node scripts/generate-soap-types.js"
+    "generate:soap-types": "node scripts/generate-soap-types.js",
+    "test:cucumber": "bddgen --config playwright.cucumber.config.ts && playwright test --config playwright.cucumber.config.ts",
+    "test:cucumber:policy": "bddgen --config playwright.cucumber.config.ts && playwright test --config playwright.cucumber.config.ts --project=PolicyCenter-BDD",
+    "test:cucumber:claims": "bddgen --config playwright.cucumber.config.ts && playwright test --config playwright.cucumber.config.ts --project=ClaimCenter-BDD",
+    "test:cucumber:billing": "bddgen --config playwright.cucumber.config.ts && playwright test --config playwright.cucumber.config.ts --project=BillingCenter-BDD",
+    "test:cucumber:smoke": "bddgen --config playwright.cucumber.config.ts && playwright test --config playwright.cucumber.config.ts --grep @smoke",
+    "report:cucumber": "playwright show-report cucumber-report"
   },
   "devDependencies": {
     "@playwright/test": "^1.44.0",
@@ -27,6 +33,7 @@
     "allure-playwright": "^3.0.0",
     "eslint": "^8.57.0",
     "eslint-plugin-playwright": "^1.6.0",
+    "playwright-bdd": "^8.5.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"
   },

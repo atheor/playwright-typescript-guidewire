@@ -23,6 +23,26 @@ npm run report           # open HTML report
 npm run report:allure    # generate + open Allure report
 ```
 
+### Cucumber / BDD tests
+
+```bash
+# All BDD tests (generates + runs)
+npm run test:cucumber
+
+# By Guidewire module
+npm run test:cucumber:policy
+npm run test:cucumber:claims
+npm run test:cucumber:billing
+
+# Smoke BDD scenarios only
+npm run test:cucumber:smoke
+
+# BDD HTML report
+npm run report:cucumber
+```
+
+See [Cucumber / BDD Tests](./cucumber-bdd.md) for full details.
+
 ---
 
 ## Running Specific Tests

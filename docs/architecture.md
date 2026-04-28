@@ -9,9 +9,13 @@ This framework tests three Guidewire insurance platform applications — **Polic
 │                     Test Automation Framework                   │
 │                                                                 │
 │  ┌────────────────────────────────────────────────────────────┐ │
-│  │  Layer 1 — Tests (specs)                                   │ │
-│  │  Declarative, human-readable test scenarios                │ │
-│  │  Tagged with @smoke / @regression                          │ │
+│  │  Layer 1a — Playwright Specs  (src/tests/)                 │ │
+│  │  Declarative TypeScript test scenarios                     │ │
+│  └────────────────────────┬───────────────────────────────────┘ │
+│                           │                                     │
+│  ┌────────────────────────┴───────────────────────────────────┐ │
+│  │  Layer 1b — Cucumber / BDD  (src/cucumber/)                │ │
+│  │  Gherkin feature files  →  bddgen  →  step definitions     │ │
 │  └────────────────────────┬───────────────────────────────────┘ │
 │                           │ calls                               │
 │  ┌────────────────────────▼───────────────────────────────────┐ │
@@ -42,7 +46,7 @@ This framework tests three Guidewire insurance platform applications — **Polic
 
 ## Three-Layer Architecture
 
-### Layer 1 — Tests
+### Layer 1a — Playwright Specs
 
 Test files live in `src/tests/` organized by module. Their only responsibilities are:
 
@@ -51,6 +55,29 @@ Test files live in `src/tests/` organized by module. Their only responsibilities
 - **Assert** outcomes using Playwright `expect`
 
 Tests contain zero raw `page.locator()` calls and zero business logic. They read like plain-language requirements.
+
+### Layer 1b — Cucumber / BDD
+
+Gherkin feature files live in `src/cucumber/features/`. They describe business scenarios in natural language that non-developers can read and verify. Step definitions in `src/cucumber/steps/` translate each Gherkin line into calls to the same workflow methods used by the Playwright specs.
+
+```
+Feature file (.feature)          ← business-readable
+      │  bddgen
+      ▼
+Generated spec (.features-gen/)  ← auto-generated; not committed
+      │  playwright test
+      ▼
+Step definitions (.steps.ts)     ← TypeScript
+      │
+      ▼
+Workflows, Pages, Services       ← shared with Layer 1a
+```
+
+Both styles share all infrastructure below Layer 1. Adding a BDD scenario does not require duplicating any workflow logic.
+
+### Layer 1 shared — Fixtures
+
+Playwright fixtures (`src/fixtures/`) inject workflow objects and test data into specs. The BDD layer has its own fixture file (`src/cucumber/fixtures.ts`) that extends `playwright-bdd`'s `test` with the same workflow objects plus a per-scenario `ScenarioState` bag.
 
 ```typescript
 // Good — reads like a requirement
