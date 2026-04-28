@@ -24,6 +24,7 @@ const policyBddProject = defineBddProject({
   steps: [
     'src/cucumber/fixtures.ts',
     'src/cucumber/steps/policy.steps.ts',
+    'src/cucumber/steps/quote-and-buy.steps.ts',
   ],
 });
 

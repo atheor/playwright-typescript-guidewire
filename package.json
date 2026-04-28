@@ -23,6 +23,9 @@
     "test:cucumber:claims": "bddgen --config playwright.cucumber.config.ts && playwright test --config playwright.cucumber.config.ts --project=ClaimCenter-BDD",
     "test:cucumber:billing": "bddgen --config playwright.cucumber.config.ts && playwright test --config playwright.cucumber.config.ts --project=BillingCenter-BDD",
     "test:cucumber:smoke": "bddgen --config playwright.cucumber.config.ts && playwright test --config playwright.cucumber.config.ts --grep @smoke",
+    "test:cucumber:quote": "bddgen --config playwright.cucumber.config.ts && playwright test --config playwright.cucumber.config.ts --grep @quote",
+    "test:quote": "playwright test src/tests/policy/quote-and-buy-car.spec.ts src/tests/policy/quote-and-buy-home.spec.ts src/tests/policy/quote-and-buy-ctp.spec.ts",
+    "test:quote:smoke": "playwright test --grep @smoke src/tests/policy/quote-and-buy-car.spec.ts src/tests/policy/quote-and-buy-home.spec.ts src/tests/policy/quote-and-buy-ctp.spec.ts",
     "report:cucumber": "playwright show-report cucumber-report"
   },
   "devDependencies": {

@@ -181,3 +181,153 @@ export interface BillingAccount {
   billingPlan: BillingPlan;
   paymentInstrument: PaymentInstrument;
 }
+
+// ─── Australia / RACQ Quote & Buy ─────────────────────────────────────────────
+
+export enum AustralianState {
+  QLD = 'QLD',
+  NSW = 'NSW',
+  VIC = 'VIC',
+  SA = 'SA',
+  WA = 'WA',
+  TAS = 'TAS',
+  ACT = 'ACT',
+  NT = 'NT',
+}
+
+export enum QuoteProductType {
+  ComprehensiveCar = 'ComprehensiveCar',
+  ThirdPartyPropertyDamage = 'ThirdPartyPropertyDamage',
+  ThirdPartyFireTheft = 'ThirdPartyFireTheft',
+  CTPQ = 'CTPQ', // QLD Green Slip
+  HomeContents = 'HomeContents',
+  ContentsOnly = 'ContentsOnly',
+  LandlordInsurance = 'LandlordInsurance',
+  TravelInsurance = 'TravelInsurance',
+  BoatInsurance = 'BoatInsurance',
+}
+
+export enum QuoteStatus {
+  Draft = 'Draft',
+  Rated = 'Rated',
+  Accepted = 'Accepted',
+  Purchased = 'Purchased',
+  Expired = 'Expired',
+  Declined = 'Declined',
+}
+
+export enum PaymentFrequency {
+  Monthly = 'Monthly',
+  Fortnightly = 'Fortnightly',
+  Annual = 'Annual',
+}
+
+export enum ExcessOption {
+  Standard = '750',
+  Higher1000 = '1000',
+  Higher1500 = '1500',
+  Higher2000 = '2000',
+}
+
+export enum ConstructionType {
+  Brick = 'Brick',
+  Timber = 'Timber',
+  BrickVeneer = 'BrickVeneer',
+  Fibro = 'Fibro',
+}
+
+export enum RoofType {
+  Tile = 'Tile',
+  Iron = 'Iron',
+  Colorbond = 'Colorbond',
+}
+
+export enum VehicleBodyType {
+  Sedan = 'Sedan',
+  SUV = 'SUV',
+  Ute = 'Ute',
+  Hatchback = 'Hatchback',
+  Wagon = 'Wagon',
+  Van = 'Van',
+  Motorcycle = 'Motorcycle',
+}
+
+export enum DiscountType {
+  RACQMember = 'RACQMember',
+  MultiPolicy = 'MultiPolicy',
+  ClaimsFree = 'ClaimsFree',
+  OnlineDiscount = 'OnlineDiscount',
+  PayAnnually = 'PayAnnually',
+  SecurityAlarm = 'SecurityAlarm',
+}
+
+export interface AustralianVehicle {
+  registrationNumber: string; // QLD format e.g. 123ABC
+  year: number;
+  make: string;
+  model: string;
+  bodyType: VehicleBodyType;
+  engineSize?: string;
+  annualKilometres?: number;
+  primaryUse: VehicleUse;
+  financed?: boolean;
+  financier?: string;
+  garagingPostcode: string;
+  agreedValue?: number; // AUD — for classic/high-value vehicles
+}
+
+export interface HomeProperty {
+  address: Address;
+  yearBuilt: number;
+  constructionType: ConstructionType;
+  roofType: RoofType;
+  numberOfBedrooms: number;
+  hasPool?: boolean;
+  hasAlarm?: boolean;
+  buildingSum?: number;  // AUD
+  contentsSum?: number;  // AUD
+  isOwnerOccupied: boolean;
+}
+
+export interface QuoteCoverageOptions {
+  excess?: ExcessOption;
+  roadside?: boolean;
+  hireCar?: boolean;
+  windscreen?: boolean;
+  newForOldReplacement?: boolean;
+  portableContents?: boolean;
+  portableContentsLimit?: number; // AUD
+  accidentalDamage?: boolean;
+}
+
+export interface QuoteRequest {
+  quoteNumber?: string;
+  product: QuoteProductType;
+  applicant: Person;
+  vehicle?: AustralianVehicle;
+  property?: HomeProperty;
+  coverageOptions?: QuoteCoverageOptions;
+  paymentFrequency: PaymentFrequency;
+  startDate: string; // ISO 8601
+  racqMember?: boolean;
+  existingPolicies?: number; // for multi-policy discount
+  claimsFreeYears?: number;
+}
+
+export interface DiscountApplied {
+  type: DiscountType;
+  percentage: number;
+  amountSaved: number; // AUD
+}
+
+export interface QuoteResult {
+  quoteNumber: string;
+  status: QuoteStatus;
+  annualPremium: number;   // AUD
+  monthlyPremium: number;  // AUD
+  fortnightlyPremium?: number; // AUD
+  excess: number; // AUD
+  discountsApplied: DiscountApplied[];
+  coverageSummary: string[];
+  expiryDate: string; // ISO 8601 — quotes expire after 30 days
+}
